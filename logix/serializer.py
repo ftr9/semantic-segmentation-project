@@ -6,3 +6,6 @@ class LogixSerializers(serializers.ModelSerializer):
     class Meta:
         model = Logix
         fields = ["logixName", "source", "destination"]
+        
+class FileSerializer(serializers.Serializer):
+    file = serializers.FileField()
