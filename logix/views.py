@@ -10,7 +10,7 @@ from .models import Logix
 # Create your views here.
 class LogixApiView(APIView):
     
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
     
     def get(self,req,*args,**kwargs):
         
