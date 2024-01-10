@@ -1,2 +1,5 @@
-django
-django_rest_framework
+Django==5.0.1
+djangorestframework==3.14.0
+keras==2.15.0
+numpy==1.26.3
+opencv_python==4.9.0.80
