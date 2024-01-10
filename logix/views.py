@@ -3,10 +3,18 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 from .serializer import LogixSerializers,FileSerializer
+from rest_framework.parsers import FileUploadParser
+import cv2
+import numpy as np
+from keras.models import load_model
+
 import os
 import uuid
 
 from .models import Logix
+
+
+
 # Create your views here.
 class LogixApiView(APIView):
     
@@ -59,32 +67,42 @@ class LogixApiViewId(APIView):
    
 
 class FileUploadView(APIView):
-    
-    def saveFileToDestination(self,uploaded_file):
-        save_path = 'uploads'  # Replace this with your desired directory
-        file_name_tobe_saved = f"{uuid.uuid4()}-{uploaded_file.name}"
-            # Check if the directory exists, if not, create it
-        if not os.path.exists(save_path):    
-            os.makedirs(save_path)
 
-            
-        # Save the file to the specified directory
-        file_path = os.path.join(save_path, file_name_tobe_saved)
-        with open(file_path, 'wb+') as destination:
-            for chunk in uploaded_file.chunks():
-                destination.write(chunk)
-        #return the file name after successful upload.
-        return file_name_tobe_saved
-    
-    def post(self, request, *args, **kwargs):
-        serializer = FileSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            uploaded_file = serializer.validated_data['file']
-            saved_file_name = self.saveFileToDestination(uploaded_file)
-           
-            # Return a success response
-            return Response({'message': 'File uploaded successfully','filename':saved_file_name}, status=status.HTTP_201_CREATED)
-        
-        # If serializer is not valid, return error response
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    model = load_model('models/model.h5')
+
+    def put(self, request, *args, **kwargs):
+
+        image_file = request.FILES['file']
+        image_data = image_file.read()
+
+
+        # Read the image from in-memory bytes using OpenCV
+        image = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR)
+        h, w, _ = image.shape
+
+        x = cv2.resize(image, (512, 512))
+        x = x.astype(np.float32) / 255.0  ## (h, w, 3)
+        x = np.expand_dims(x, axis=0)  ## (1, h, w, 3)
+
+        """ Prediction """
+        y = self.model.predict(x, verbose=0)[0][:, :, 2]
+        y = cv2.resize(y, (w, h))  # Resize mask to original image size
+
+        # Create a transparency mask (0s for background, 255s for foreground)
+        transparency_mask = np.uint8((y > 0.5) * 255)
+
+        # Create a blank image with a transparent background
+        transparent_image = np.zeros((h, w, 4), dtype=np.uint8)
+        # Copy the object onto the transparent background
+        transparent_image[:, :, :3] = image
+        transparent_image[:, :, 3] = transparency_mask
+
+        # Save the image with a transparent background as PNG
+        image_name = f"{uuid.uuid4()}-bgremoved.png"
+        output_path = f"uploads/{image_name}"
+        cv2.imwrite(output_path, transparent_image)
+
+        return Response({'message': 'File uploaded successfully', 'filename': image_name},
+                        status=status.HTTP_201_CREATED)
+
+
