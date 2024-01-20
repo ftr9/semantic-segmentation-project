@@ -1,0 +1,19 @@
+.userInputImage {
+  text-align: center;
+}
+
+.userInputImage_header {
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+  font-size: 3.5rem;
+}
+
+.userInputImage_spanningTxt {
+  margin: 1rem 0;
+}
+
+@media (max-width: 430px) {
+  .userInputImage_header {
+    font-size: 3rem;
+  }
+}

@@ -1,0 +1,48 @@
+.resultImageContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.resultImage_output {
+  height: 500px;
+  width: 350px;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.resultImage_transparent {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+}
+
+.resultImage_transparent img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.resultImage_transparent .bg_overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.resultImage_input {
+  margin-left: 60px;
+}
+
+.resultImage_input input {
+  display: block;
+  margin-top: 20px;
+}
+
+button {
+  display: block;
+  margin: 10px 0px;
+}

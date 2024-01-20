@@ -1,8 +1,26 @@
-import { useState, useEffect } from 'react';
-import ConvertImage from './components/ConvertImage';
+import './App.css';
+
+import ResultImage from './components/ResultImage';
 
 function App() {
-  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  return (
+    <div className="rootContainer">
+      <ResultImage />
+    </div>
+  );
+}
+
+/**
+ * <Header />
+      <div className="inputImageContainer">
+        <div className="inputImageContent">
+          <UserInputImage />
+        </div>
+      </div>
+ */
+
+/**
+ * const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
 
   const selectImageChangeHandle = e => {
@@ -47,6 +65,8 @@ function App() {
       )}
     </>
   );
-}
+ * 
+ * 
+ */
 
 export default App;
