@@ -10,5 +10,6 @@ export default defineConfig({
       '/logix/api/?format=json': 'http://localhost:8000',
       '/media': 'http://localhost:8000',
     },
+    host: true,
   },
 });

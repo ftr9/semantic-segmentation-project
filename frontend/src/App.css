@@ -3,12 +3,33 @@
 }
 
 .inputImageContainer {
-  height: 90vh;
   display: flex;
   align-items: center;
+  margin-top: 5rem;
   justify-content: center;
+  padding: 10rem 0;
+  flex-direction: column;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(0, 0, 0, 0.438),
+      rgba(0, 0, 0, 0.885)
+    ),
+    url('https://img.freepik.com/premium-vector/different-hand-drawn-doodle-elements-pattern-abstract-seamless-background_95169-2901.jpg?size=626&ext=jpg&ga=GA1.1.200777147.1706350867&semt=ais');
+}
+.main_img {
+  display: block;
+  width: 80%;
+  margin: 3rem auto;
+}
+.main_img2 {
+  width: 200px;
 }
 
 .inputImageContent {
-  max-width: 500px;
+  max-width: 600px;
+  border-radius: 2rem;
+  z-index: 1000;
+  background-color: white;
+  padding: 5rem;
+  justify-self: flex-end;
 }

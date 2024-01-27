@@ -1,0 +1,11 @@
+.loadingIndicatorContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingAnimation {
+  max-width: 400px;
+}

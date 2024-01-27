@@ -4,30 +4,53 @@
   padding: 10px;
 }
 .resultImage_output {
-  height: 500px;
-  width: 350px;
-  border-radius: 1rem;
-  overflow: hidden;
   position: relative;
 }
 
 .resultImage_transparent {
   position: relative;
-  height: 100%;
-  width: 100%;
   z-index: 1000;
+  height: 500px;
+  width: 350px;
+  overflow: hidden;
 }
 
-.resultImage_transparent img {
+.resultImage_transparent .resultImage {
+  position: relative;
+  z-index: 1000;
   height: 100%;
   width: 100%;
+  filter: drop-shadow(0px 0px 5px rgb(121, 121, 121));
+}
+
+.resultImage_transparent .preview_img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  transition: width 0.5s ease;
+  transform-origin: left;
+  animation-name: glowUp;
+  animation-duration: 0.5s;
   object-fit: cover;
+}
+
+@keyframes glowUp {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .resultImage_transparent .bg_overlay {
   height: 100%;
   width: 100%;
   position: absolute;
+  object-fit: cover;
   top: 0;
   left: 0;
   z-index: -1;
@@ -35,14 +58,56 @@
 
 .resultImage_input {
   margin-left: 60px;
+  width: 400px;
 }
 
 .resultImage_input input {
   display: block;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 
 button {
   display: block;
   margin: 10px 0px;
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+  width: 100%;
+  padding: 12px 10px;
+  border: none;
+  display: block;
+}
+input:focus {
+  outline: none;
+}
+
+.inputColorContainer {
+  height: 0px;
+  overflow: hidden;
+  margin: 10px 0px;
+}
+
+#colorLabel {
+  background-color: red;
+  width: 40px;
+  display: block;
+  height: 50px;
+  width: 50px;
+  border: 1px solid orange;
+  border-radius: 50%;
+}
+
+.backgroundUrl {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.backgroundUrl_images {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
 }

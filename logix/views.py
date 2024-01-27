@@ -78,29 +78,28 @@ class FileUploadView(APIView):
 
         # Read the image from in-memory bytes using OpenCV
         image = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR)
-        h, w, _ = image.shape
-
         x = cv2.resize(image, (512, 512))
-        x = x.astype(np.float32) / 255.0  ## (h, w, 3)
-        x = np.expand_dims(x, axis=0)  ## (1, h, w, 3)
+        x = x/255.0
+        x = np.expand_dims(x, axis=0)
 
         """ Prediction """
-        y = self.model.predict(x, verbose=0)[0][:, :, 2]
-        y = cv2.resize(y, (w, h))  # Resize mask to original image size
+        pred = self.model.predict(x, verbose=0)
 
-        # Create a transparency mask (0s for background, 255s for foreground)
-        transparency_mask = np.uint8((y > 0.5) * 255)
+        """ Save final prediction with removed background as PNG """
+        image_h, image_w, _ = image.shape
 
-        # Create a blank image with a transparent background
-        transparent_image = np.zeros((h, w, 4), dtype=np.uint8)
-        # Copy the object onto the transparent background
-        transparent_image[:, :, :3] = image
-        transparent_image[:, :, 3] = transparency_mask
+        mask = pred[0][0]
+        mask = cv2.resize(mask, (image_w, image_h))
+        mask = np.expand_dims(mask, axis=-1)
+
+        # Create RGBA image with transparency
+        result_image = np.concatenate([image, mask * 255], axis=-1).astype(np.uint8)
+
 
         # Save the image with a transparent background as PNG
         image_name = f"{uuid.uuid4()}-bgremoved.png"
         output_path = f"uploads/{image_name}"
-        cv2.imwrite(output_path, transparent_image)
+        cv2.imwrite(output_path,result_image, [cv2.IMWRITE_PNG_COMPRESSION, 0])
 
         return Response({'message': 'File uploaded successfully', 'filename': image_name},
                         status=status.HTTP_201_CREATED)

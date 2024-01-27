@@ -5,7 +5,6 @@
 .userInputImage_header {
   margin-bottom: 2.5rem;
   font-weight: 700;
-  font-size: 3.5rem;
 }
 
 .userInputImage_spanningTxt {
@@ -16,4 +15,10 @@
   .userInputImage_header {
     font-size: 3rem;
   }
+}
+
+.fileInput {
+  height: 0;
+  width: 0;
+  overflow: hidden;
 }

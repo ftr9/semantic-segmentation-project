@@ -1,0 +1,12 @@
+.imagePaletteItem {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  border: 'none';
+  padding: 0px;
+}
+
+.selected {
+  border: 2px solid #fab005;
+  padding: 0.3rem;
+}
