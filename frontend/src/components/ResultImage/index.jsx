@@ -127,18 +127,20 @@ const ResultImage = ({ resultImage, originalImage }) => {
             className="resultImage"
           ></div>
         </div>
-        <MdPreview
-          size={36}
-          style={{
-            margin: '0 auto',
-          }}
-          onMouseDown={() => {
-            setIsInPreviewMode(true);
-          }}
-          onMouseUp={() => {
-            setIsInPreviewMode(false);
-          }}
-        ></MdPreview>
+
+        <div className="preview_container">
+          <img
+            className="previewIcon"
+            src={'https://cdn-icons-png.flaticon.com/128/3596/3596215.png'}
+            alt="preview"
+            onMouseDown={() => {
+              setIsInPreviewMode(true);
+            }}
+            onMouseUp={() => {
+              setIsInPreviewMode(false);
+            }}
+          />
+        </div>
       </div>
       <div className="resultImage_input">
         <div className="backgroundUrl">

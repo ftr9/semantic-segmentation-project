@@ -14,6 +14,48 @@ import uuid
 from .models import Logix
 
 
+class FileUploadView(APIView):
+
+    model = load_model('models/model.h5')
+
+    def put(self, request, *args, **kwargs):
+
+        image_file = request.FILES['file']
+        image_data = image_file.read()
+
+
+        # Read the image from in-memory bytes using OpenCV
+        image = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR)
+        x = cv2.resize(image, (512, 512))
+        x = x/255.0
+        x = np.expand_dims(x, axis=0)
+
+        """ Prediction """
+        pred = self.model.predict(x, verbose=0)
+
+        """ Save final prediction with removed background as PNG """
+        image_h, image_w, _ = image.shape
+
+        mask = pred[0][0]
+        mask = cv2.resize(mask, (image_w, image_h))
+        mask = np.expand_dims(mask, axis=-1)
+
+        # Create RGBA image with transparency
+        result_image = np.concatenate([image, mask * 255], axis=-1).astype(np.uint8)
+
+
+        # Save the image with a transparent background as PNG
+        image_name = f"{uuid.uuid4()}-bgremoved.png"
+        output_path = f"uploads/{image_name}"
+        cv2.imwrite(output_path,result_image, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+
+        return Response({'message': 'File uploaded successfully', 'filename': image_name},
+                        status=status.HTTP_201_CREATED)
+
+
+
+
+'''
 
 # Create your views here.
 class LogixApiView(APIView):
@@ -64,44 +106,4 @@ class LogixApiViewId(APIView):
             return Response(logix_serializer.data, status=status.HTTP_200_OK)
         return Response(logix_serializer.errors,status=status.HTTP_200_OK)
    
-   
-
-class FileUploadView(APIView):
-
-    model = load_model('models/model.h5')
-
-    def put(self, request, *args, **kwargs):
-
-        image_file = request.FILES['file']
-        image_data = image_file.read()
-
-
-        # Read the image from in-memory bytes using OpenCV
-        image = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR)
-        x = cv2.resize(image, (512, 512))
-        x = x/255.0
-        x = np.expand_dims(x, axis=0)
-
-        """ Prediction """
-        pred = self.model.predict(x, verbose=0)
-
-        """ Save final prediction with removed background as PNG """
-        image_h, image_w, _ = image.shape
-
-        mask = pred[0][0]
-        mask = cv2.resize(mask, (image_w, image_h))
-        mask = np.expand_dims(mask, axis=-1)
-
-        # Create RGBA image with transparency
-        result_image = np.concatenate([image, mask * 255], axis=-1).astype(np.uint8)
-
-
-        # Save the image with a transparent background as PNG
-        image_name = f"{uuid.uuid4()}-bgremoved.png"
-        output_path = f"uploads/{image_name}"
-        cv2.imwrite(output_path,result_image, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-
-        return Response({'message': 'File uploaded successfully', 'filename': image_name},
-                        status=status.HTTP_201_CREATED)
-
-
+'''
