@@ -1,3 +1,15 @@
-# Rest api with django + django_rest_framework
+# Background Elimination of Human Image using semantic Segmentation Algorithm
 
-## Just a basic simpe todo app to get started and getting our hands dry
+# features
+[x] remove background instantly within 5-10 seconds
+[x] u2-net architecture that can extract complex features from an image easily.
+[x] customize your background accordingly i.e adding custom colors, custom background image, adding blur and filters
+[x] Downlod an image in you desired format.
+
+# tech stack
+- Python / Django
+- Javascript / React.js
+- Tensorflow , keras
+
+## link to Machine learning Model
+https://github.com/ftr9/bg-remove-u2net
