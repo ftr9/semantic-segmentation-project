@@ -13,4 +13,4 @@
 - Tensorflow , keras
 
 ## link to Machine learning Model
-https://github.com/ftr9/bg-remove-u2net
+https://github.com/ftr9/bg-remove-u2net-model
